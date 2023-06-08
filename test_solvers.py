@@ -1,39 +1,56 @@
-#!/usr/bin/env python3
 """Contains routines to test the solvers module"""
 
+from pathlib import Path
+import pytest
 import numpy as np
 import solvers
 
-def main():
-    """Main testing function."""
 
-    print("\nTest 1")
-    aa = np.array([[2.0, 4.0, 4.0], [5.0, 4.0, 2.0], [1.0, 2.0, -1.0]])
-    bb = np.array([1.0, 4.0, 2.0])
-    xx_expected = np.array([0.666666666666667, 0.416666666666667, -0.5])
+ABSOLUTE_TOLERANCE = 1e-10
+
+RELATIVE_TOLERANCE = 1e-10
+
+TEST_DATA_PATH = Path("testdata")
+
+SUCCESSFUL_TESTS = ["simple", "needs_pivot"]
+
+LINEAR_DEP_TESTS = ["linearly_dependant"]
+
+
+@pytest.mark.parametrize("testname", SUCCESSFUL_TESTS)
+def test_successful_elimination(testname):
+    """Tests successful elimination"""
+    aa, bb = _get_input(testname)
+    xx_expected = _get_expected_output(testname)
     xx_gauss = solvers.gaussian_eliminate(aa, bb)
-    _check_result(xx_expected, xx_gauss)
+    assert np.allclose(xx_gauss, xx_expected, atol=ABSOLUTE_TOLERANCE, rtol=RELATIVE_TOLERANCE)
 
-    print("\nTest 2")
-    aa = np.array([[2.0, 4.0, 4.0], [1.0, 2.0, -1.0], [5.0, 4.0, 2.0]])
-    bb = np.array([1.0, 2.0, 4.0])
-    xx_expected = np.array([0.666666666666667, 0.416666666666667, -0.5])
+
+@pytest.mark.parametrize("testname", LINEAR_DEP_TESTS)
+def test_linear_dependancy(testname):
+    """Tests linear dependancy"""
+    aa, bb = _get_input(testname)
     xx_gauss = solvers.gaussian_eliminate(aa, bb)
-    _check_result(xx_expected, xx_gauss)
-
-    print("\nTest 3")
-    aa = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])
-    bb = np.array([1.0, 2.0, 3.0])
-    xx_expected = None
-    xx_gauss = solvers.gaussian_eliminate(aa, bb)
-    _check_result(xx_expected, xx_gauss)
+    assert xx_gauss is None
 
 
-def _check_result(expected, obtained):
-    """Checks results by printing expected and obtained one."""
-    print("Expected:", expected)
-    print("Obtained:", obtained)
+def _get_input(testname):
+    """Reads the input for a given test"""
+    testinfile = TEST_DATA_PATH / (testname + ".in")
+    data = np.loadtxt(testinfile)
+    nn = data.shape[1]
+    aa = data[:nn, :]
+    bb = data[nn, :]
+    return aa, bb
 
 
-if __name__ == '__main__':
-    main()
+def _get_expected_output(testname):
+    """Reads the ouput for a given test"""
+    testoutfile = TEST_DATA_PATH / (testname + ".out")
+    data = np.loadtxt(testoutfile)
+    return data
+
+
+# In case the python script is executed directly, it should start pytest.
+if __name__ == "__main__":
+    pytest.main()
