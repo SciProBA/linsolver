@@ -15,6 +15,10 @@ def gaussian_eliminate(coeffs, rhs):
     """
     nn = coeffs.shape[0]
     for ii in range(nn - 1):
+        imax = np.argmax(np.abs(coeffs[ii:, ii])) + ii
+        if imax != ii:
+            coeffs[ii], coeffs[imax] = np.array(coeffs[imax]), np.array(coeffs[ii])
+            rhs[ii], rhs[imax] = np.array(rhs[imax]), np.array(rhs[ii])
         for jj in range(ii + 1, nn):
             coeff = -coeffs[jj, ii] / coeffs[ii, ii]
             coeffs[jj, ii:] += coeff * coeffs[ii, ii:]
