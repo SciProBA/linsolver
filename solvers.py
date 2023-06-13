@@ -1,6 +1,9 @@
 """Routines for solving a linear system of equations."""
 import numpy as np
 
+# Tolerance value for dependency check
+_DEPENDENCY_TOL = 1e-10
+
 
 def gaussian_eliminate(coeffs, rhs):
     """Solves a linear system of equations (Ax = b) by Gauss-elimination
@@ -14,11 +17,16 @@ def gaussian_eliminate(coeffs, rhs):
         dependent.
     """
     nn = coeffs.shape[0]
-    for ii in range(nn - 1):
+    for ii in range(nn):
         imax = np.argmax(np.abs(coeffs[ii:, ii])) + ii
         if imax != ii:
             coeffs[ii], coeffs[imax] = np.array(coeffs[imax]), np.array(coeffs[ii])
             rhs[ii], rhs[imax] = np.array(rhs[imax]), np.array(rhs[ii])
+            # Alternatively, copy can be ensured via fancy indexing:
+            # coeffs[[ii, imax]] = coeffs[[imax, ii]]
+            # rhs[[ii, imax]] = rhs[[imax, ii]]
+        if np.abs(coeffs[ii, ii]) < _DEPENDENCY_TOL:
+            return None
         for jj in range(ii + 1, nn):
             coeff = -coeffs[jj, ii] / coeffs[ii, ii]
             coeffs[jj, ii:] += coeff * coeffs[ii, ii:]
