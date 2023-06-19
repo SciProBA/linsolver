@@ -16,7 +16,7 @@ def gaussian_eliminate(coeffs, rhs):
         Vector xx with the solution of the linear equation.
 
     Raises:
-        ValueError if the system of equation is linearly dependent.
+        ValueError: if the system of equation is linearly dependent.
     """
     nn = coeffs.shape[0]
     for ii in range(nn):
