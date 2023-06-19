@@ -22,7 +22,7 @@ def test_successful_elimination(testname):
     """Tests successful elimination"""
     aa, bb = _get_input(testname)
     xx_expected = _get_expected_output(testname)
-    xx_gauss = solvers.gaussian_eliminate(aa, bb)
+    xx_gauss = solvers.solve(aa, bb)
     assert np.allclose(xx_gauss, xx_expected, atol=ABSOLUTE_TOLERANCE, rtol=RELATIVE_TOLERANCE)
 
 
@@ -30,8 +30,8 @@ def test_successful_elimination(testname):
 def test_linear_dependancy(testname):
     """Tests linear dependancy"""
     aa, bb = _get_input(testname)
-    with pytest.raises(ValueError):
-        _ = solvers.gaussian_eliminate(aa, bb)
+    with pytest.raises(np.linalg.LinAlgError):
+        _ = solvers.solve(aa, bb)
 
 
 def _get_input(testname):
