@@ -1,5 +1,6 @@
 """Reads a linear system of equations and solves it and writes result."""
 import sys
+import numpy as np
 import linsolverio
 import solvers
 
@@ -17,8 +18,8 @@ def main():
         sys.exit(1)
 
     try:
-        result = solvers.gaussian_eliminate(coeffs, rhs)
-    except ValueError:
+        result = solvers.solve(coeffs, rhs)
+    except np.linalg.LinAlgError:
         result = None
 
     try:

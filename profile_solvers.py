@@ -1,3 +1,5 @@
+"""Calls the linear solver with random input."""
+
 import numpy
 import solvers
 
