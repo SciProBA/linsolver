@@ -4,8 +4,8 @@ import argparse
 from pathlib import Path
 import sys
 import numpy as np
-import linsolverio
-import solvers
+import linsolver
+
 
 _DESCRIPTION = """Solves the linear sytem of equation Ax = b. It requires an input file
 "linsolve.in", containing the coefficient matrix A (each line of A should be written into a separate
@@ -23,22 +23,22 @@ def main():
     workdir = Path(args.directory)
     inputfile = workdir / INPUT_FILE_NAME
     try:
-        coeffs, rhs = linsolverio.read_input(inputfile)
+        coeffs, rhs = linsolver.io.read_input(inputfile)
     except IOError:
         print(f"Could not read file '{inputfile}'")
         sys.exit(1)
 
     try:
-        result = solvers.solve(coeffs, rhs)
+        result = linsolver.solvers.solve(coeffs, rhs)
     except np.linalg.LinAlgError:
         result = None
 
     outputfile = workdir / OUTPUT_FILE_NAME
     try:
         if result is None:
-            linsolverio.write_lindep_error(outputfile)
+            linsolver.io.write_lindep_error(outputfile)
         else:
-            linsolverio.write_result(outputfile, result)
+            linsolver.io.write_result(outputfile, result)
     except IOError:
         print(f"Could not write file '{outputfile}'")
         sys.exit(1)

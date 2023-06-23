@@ -3,7 +3,7 @@
 from pathlib import Path
 import pytest
 import numpy as np
-import solvers
+import linsolver
 
 
 ABSOLUTE_TOLERANCE = 1e-10
@@ -22,7 +22,7 @@ def test_successful_elimination(testname):
     """Tests successful elimination"""
     aa, bb = _get_input(testname)
     xx_expected = _get_expected_output(testname)
-    xx_gauss = solvers.solve(aa, bb)
+    xx_gauss = linsolver.solvers.solve(aa, bb)
     assert np.allclose(xx_gauss, xx_expected, atol=ABSOLUTE_TOLERANCE, rtol=RELATIVE_TOLERANCE)
 
 
@@ -31,7 +31,7 @@ def test_linear_dependancy(testname):
     """Tests linear dependancy"""
     aa, bb = _get_input(testname)
     with pytest.raises(np.linalg.LinAlgError):
-        _ = solvers.solve(aa, bb)
+        _ = linsolver.solvers.solve(aa, bb)
 
 
 def _get_input(testname):
