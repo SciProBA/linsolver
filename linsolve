@@ -7,14 +7,10 @@ import numpy as np
 import linsolverio
 import solvers
 
-_DESCRIPTION = """Solves the linear sytem of equation AX=B. It requires an
-input file "linsolve.in", containing the coefficient matrix A (each line of A
-should be written into a separate line) followed by the
-right-hand-side vectors B. Each vector in B (column vector in the equation)
-should be written into a separate *row* (as row vector) in the input. The
-script writes a file "linsolve.out" containing the solution vectors X as row
-vectors (one solution vector per line) or an error message if the solver
-failed"""
+_DESCRIPTION = """Solves the linear sytem of equation Ax = b. It requires an input file
+"linsolve.in", containing the coefficient matrix A (each line of A should be written into a separate
+line) followed by the right-hand-side vectorb b in a single row. The script writes a file
+"linsolve.out" containing the solution vector x as row vector or an error message if the solver failed"""
 
 INPUT_FILE_NAME = "linsolve.in"
 
