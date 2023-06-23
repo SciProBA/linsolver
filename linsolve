@@ -1,12 +1,13 @@
+#!/usr/bin/env python3
 """Reads a linear system of equations and solves it and writes result."""
 import sys
 import numpy as np
 import linsolverio
 import solvers
 
-INPUT_FILE_NAME = "linsolver.in"
+INPUT_FILE_NAME = "linsolve.in"
 
-OUTPUT_FILE_NAME = "linsolver.out"
+OUTPUT_FILE_NAME = "linsolve.out"
 
 
 def main():
